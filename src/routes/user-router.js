@@ -5,4 +5,4 @@ export const userRouter = express.Router()
 export const controller = new UserController()
 
 userRouter.get('/', controller.showUserInfo)
-userRouter.get('/loggedin', controller.showHistory)
+userRouter.get('/showhistory', controller.showHistory)

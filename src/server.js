@@ -46,6 +46,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/', router)
+
 app.use((err, req, res, next) => {
   const viewData = {
     errormessage: err.message,

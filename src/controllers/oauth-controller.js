@@ -32,7 +32,7 @@ export class OauthController {
       const URL = `${process.env.BASE_URL_GITLAB_OAUTH}?${qs.toString()}`
       res.redirect(URL)
     } catch (error) {
-      throw createError(error.status, error.message)
+      next(createError(error.status, error.message))
     }
   }
 
@@ -48,9 +48,8 @@ export class OauthController {
       if (req.session.state !== req.query.state) {
         console.log('req.session.state:' + req.session.state)
         console.log('req.query.state:' + req.query.state)
-        throw createError('Uh oh! Something went wrong!' + 'req.query.state:' + req.query.state + 'req.session.state:' + req.session.state)
+        throw createError(401, 'Unauthorized')
       }
-
       const parameters = {
         client_id: process.env.GITLAB_APPLICATION_ID,
         code: req.query.code,
@@ -58,17 +57,13 @@ export class OauthController {
         client_secret: process.env.GITLAB_SECRET,
         redirect_uri: process.env.REDIRECT_URI
       }
-
       const qs = new URLSearchParams(parameters)
       const URL = `${process.env.TOKEN_URL_GITLAB_OAUTH}?${qs.toString()}`
-
       const gitlabResponse = await axios.post(URL)
-
       req.session.tokenInfo = gitlabResponse.data
-
       res.redirect('/user')
     } catch (error) {
-      throw createError(error.status, error.message)
+      next(createError(400, error.message))
     }
   }
 }

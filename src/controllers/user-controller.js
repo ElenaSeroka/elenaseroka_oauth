@@ -32,7 +32,7 @@ export class UserController {
 
       res.render('pages/info', { viewData })
     } catch (error) {
-      throw createError(error.status, error.message)
+      next(createError(error.status, error.message))
     }
   }
 
@@ -75,7 +75,7 @@ export class UserController {
       const viewData = myEvents
       res.render('pages/history', { viewData })
     } catch (error) {
-      throw createError(error.status, error.message)
+      next(createError(error.status, error.message))
     }
   }
 }

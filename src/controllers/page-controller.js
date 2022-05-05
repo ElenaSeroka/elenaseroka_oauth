@@ -12,12 +12,12 @@ export class PageController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  renderMain (req, res, next) {
+  renderMain(req, res, next) {
     try {
-      const viewData = {}
-      res.render('pages/main', { viewData })
+      // const viewData = {}
+      res.render('pages/main')
     } catch (error) {
-      throw createError(error.status, error.message)
+    next(createError(error.status, error.message))
     }
   }
 
@@ -28,12 +28,12 @@ export class PageController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  renderLoginPage (req, res, next) {
+  renderLoginPage(req, res, next) {
     try {
-      const viewData = {}
-      res.render('pages/login', { viewData })
+      // const viewData = {}
+      res.render('pages/login')
     } catch (error) {
-      throw createError(error.status, 'Uh Oh! Something went wrong!')
+      next( createError(error.status, 'Uh Oh! Something went wrong!'))
     }
   }
 
@@ -46,19 +46,13 @@ export class PageController {
    */
   renderLogout (req, res, next) {
     try {
-      let noSession = false
       if (req.session.tokenInfo === undefined) {
-        noSession = true
-      }
-      const viewData = {}
-      if (noSession === true) {
         res.redirect('/')
-      } else if (noSession === false) {
-        res.render('pages/logout', { viewData })
-        next()
       }
+      res.render('pages/logout')
+      next()
     } catch (error) {
-      throw createError(error.status, 'Uh Oh! Something went wrong!')
+      next(createError(error.status, 'Uh Oh! Something went wrong!'))
     }
   }
 
@@ -69,7 +63,7 @@ export class PageController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async logout (req, res, next) {
+  async logout(req, res, next) {
     try {
       const parameters = {
         client_id: process.env.GITLAB_APPLICATION_ID,
@@ -85,7 +79,7 @@ export class PageController {
       await axios.post('https://gitlab.lnu.se/users/sign_out')
       req.session.destroy()
     } catch (error) {
-      throw createError(error.status, 'Uh Oh! Something went wrong!')
+      next(createError(error.status, 'Uh Oh! Something went wrong!'))
     }
   }
 }

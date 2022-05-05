@@ -7,11 +7,9 @@ import createError from 'http-errors'
  * @param {object} res - Express response object.
  * @param {Function} next - Express next middleware function.
  */
-export async function checkSession (req, res, next) {
+export async function loggedIn (req, res, next) {
   try {
-    if (!req.session.tokenInfo) {
-      throw createError(403, 'Uh oh! Something went wrong!')
-    }
+    console.log('Loggad in')
     next()
   } catch (error) {
     next(createError(404, error.message))
