@@ -1,6 +1,6 @@
 import express from 'express'
 import { PageController } from '../controllers/page-controller.js'
-import { loggedIn } from '../middlewares/loggedIN.js'
+import { loggedIn } from '../middlewares/loggedIn.js'
 
 export const pageRouter = express.Router()
 export const controller = new PageController()
